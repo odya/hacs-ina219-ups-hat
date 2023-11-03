@@ -152,7 +152,7 @@ class RemainingTimeSensor(INA219UpsHatSensor):
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator)
         self._name = "Remaining Time"
-        self._attr_native_unit_of_measurement = UnitOfTime.SECONDS
+        self._attr_native_unit_of_measurement = UnitOfTime.HOURS
         self._attr_device_class = SensorDeviceClass.DURATION
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_suggested_display_precision = 0
