@@ -70,11 +70,12 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                 remaining_battery_capacity = None
                 remaining_time = None
             else:
-                remaining_battery_capacity = (
-                    real_soc / 100.0) * self._battery_capacity
+                remaining_battery_capacity = (real_soc / 100.0) * self._battery_capacity
                 if not online:
                     remaining_time = round(
-                        (remaining_battery_capacity / -current) * 60.0, 0
+                        10 * (remaining_battery_capacity / 1000)
+                        / -(bus_voltage * (current / 1000)), # Smooth power
+                        1
                     )
                 else:
                     remaining_time = None
