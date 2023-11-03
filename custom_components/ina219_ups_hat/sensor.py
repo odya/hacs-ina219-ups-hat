@@ -1,6 +1,5 @@
-"""Details about the INA219 UPS Hat sensor"""
+"""INA219 UPS Hat sensors"""
 
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity
 from homeassistant.components.sensor.const import SensorDeviceClass, SensorStateClass
 from homeassistant import core
 from homeassistant.components.sensor import SensorEntity, PLATFORM_SCHEMA
@@ -30,6 +29,7 @@ from .const import (
     CONF_SCAN_INTERVAL,
     CONF_SMA_SAMPLES,
     DEFAULT_NAME,
+    DOMAIN,
 )
 
 
@@ -64,19 +64,18 @@ async def async_setup_platform(
         SocSensor(coordinator),
         RemainingCapacitySensor(coordinator),
         RemainingTimeSensor(coordinator),
-        OnlineBinarySensor(coordinator),
-        ChargingBinarySensor(coordinator),
     ]
     async_add_entities(sensors)
+
+    hass.helpers.discovery.load_platform('binary_sensor', DOMAIN, {
+        "coordinator": coordinator
+    }, config)
 
     async def async_update_data(now):
         await coordinator.async_request_refresh()
 
     async_track_time_interval(hass, async_update_data,
                               config.get(CONF_SCAN_INTERVAL))
-
-
-# SENSORS
 
 
 class INA219UpsHatSensor(INA219UpsHatEntity, SensorEntity):
@@ -141,6 +140,7 @@ class RemainingCapacitySensor(INA219UpsHatSensor):
         super().__init__(coordinator)
         self._name = "Remaining Capacity"
         self._attr_native_unit_of_measurement = "mAh"
+        self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
         self._attr_suggested_display_precision = 0
 
     @property
@@ -160,35 +160,3 @@ class RemainingTimeSensor(INA219UpsHatSensor):
     @property
     def native_value(self):
         return self._coordinator.data["remaining_time"]
-
-
-# BINARY SENSORS
-
-
-class INA219UpsHatBinarySensor(INA219UpsHatEntity, BinarySensorEntity):
-    """Base binary sensor"""
-
-    def __init__(self, coordinator: INA219UpsHatCoordinator) -> None:
-        super().__init__(coordinator)
-
-
-class OnlineBinarySensor(INA219UpsHatBinarySensor):
-    def __init__(self, coordinator) -> None:
-        super().__init__(coordinator)
-        self._name = "Online"
-        self._attr_device_class = BinarySensorDeviceClass.PLUG
-
-    @property
-    def is_on(self):
-        return self._coordinator.data["online"]
-
-
-class ChargingBinarySensor(INA219UpsHatBinarySensor):
-    def __init__(self, coordinator) -> None:
-        super().__init__(coordinator)
-        self._name = "Charging"
-        self._attr_device_class = BinarySensorDeviceClass.BATTERY_CHARGING
-
-    @property
-    def is_on(self):
-        return self._coordinator.data["charging"]
