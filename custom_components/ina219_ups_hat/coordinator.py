@@ -30,7 +30,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self._min_charging_current = config.get(CONF_MIN_CHARGING_CURRENT)
 
         INA219 = get_ina219_class()
-        self._ina219 = INA219(addr=int(self._addr, 16))
+        self._ina219 = INA219(addr=int(self._addr))
         self._ina219_wrapper = INA219Wrapper(self._ina219, self._sma_samples)
 
         super().__init__(
