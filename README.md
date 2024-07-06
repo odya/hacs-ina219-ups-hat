@@ -15,7 +15,7 @@ This integration allows you to monitor any INA219 based UPS hat (e.g. [Waveshare
 
 If you use [HACS](https://hacs.xyz/) you can install and update this component.
 
-1. Go into HACS -> CUSTOM REPOSITORIES and add url: https://github.com/odya/hass-ina219-ups-hat with type "integration"
+1. Go into HACS -> CUSTOM REPOSITORIES and add url: <https://github.com/odya/hass-ina219-ups-hat> with type "integration"
 2. Go to integration, search "ina219*ups_hat" and click \_Install*.
 
 ### Manual
@@ -85,7 +85,7 @@ sensor:
     sma_samples: 10
 ```
 
-_Tip:_ Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
+*Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
 
 #### Batteries Count
 
@@ -113,7 +113,7 @@ $ sudo raspi-config
 
 Select `Interfacing options->I2C` choose `<Yes>` and hit `Enter`, then go to `Finish` and you'll be prompted to reboot.
 
-Install dependencies for use the `smbus-cffi` module and enable your `homeassistant` user to join the _i2c_ group:
+Install dependencies for use the `smbus-cffi` module and enable your `homeassistant` user to join the *i2c* group:
 
 ```bash
 # pi user environment: Install i2c dependencies and utilities
@@ -128,7 +128,7 @@ $ sudo reboot
 
 #### Check the i2c address of the sensor (using HassOS I2C Configurator)
 
-You may use (HassOS I2C Configurator)[https://community.home-assistant.io/t/add-on-hassos-i2c-configurator/264167] to activate i2c on your Hass host and search available devices addresses
+You may use [HassOS I2C Configurator](https://community.home-assistant.io/t/add-on-hassos-i2c-configurator/264167) to activate i2c on your Hass host and search available devices addresses
 
 #### Check the i2c address of the sensor (using i2c-tools)
 
