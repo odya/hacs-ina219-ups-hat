@@ -44,6 +44,8 @@ sensor:
     max_soc: 91               # Optional
     battery_capacity: 9000    # Optional
     sma_samples: 5            # Optional
+    min_online_current: -100  # Optional, mA
+    min_charging_current: 55  # Optional, mA
 ```
 Following data can be read:
  - SoC (State of Charge)
