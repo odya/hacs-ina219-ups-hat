@@ -5,6 +5,7 @@ DOMAIN = "ina219_ups_hat"
 DEFAULT_NAME = "ina219_ups_hat"
 
 CONF_BATTERY_CAPACITY = "battery_capacity"
+CONF_ADDR = "addr"
 CONF_MAX_SOC = "max_soc"
 CONF_SMA_SAMPLES = "sma_samples"
 CONF_MIN_ONLINE_CURRENT = "min_online_current"

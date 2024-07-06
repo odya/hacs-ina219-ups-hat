@@ -1,11 +1,12 @@
 import numpy as np
 from collections import deque
-from .ina219 import INA219
+
+from .ina219.ina219_interface import INA219Interface
 
 COEF_SMAx2 = 2
 
 class INA219Wrapper:
-    def __init__(self, ina219 : INA219, samples_cnt : int):
+    def __init__(self, ina219 : INA219Interface, samples_cnt : int):
         self._ina219 = ina219
         self._bus_voltage_buf = deque(maxlen=samples_cnt * COEF_SMAx2)
         self._shunt_voltage_buf = deque(maxlen=samples_cnt)

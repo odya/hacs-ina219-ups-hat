@@ -10,16 +10,20 @@ This integration allows you to monitor any INA219 based UPS hat (e.g. [Waveshare
 </table>
 
 ## Installation
-### HACS
-If you use [HACS](https://hacs.xyz/) you can install and update this component.
-1. Go into HACS -> CUSTOM REPOSITORIES and add url: https://github.com/odya/hass-ina219-ups-hat with type "integration"
-2. Go to integration, search "ina219_ups_hat" and click *Install*.
 
+### HACS
+
+If you use [HACS](https://hacs.xyz/) you can install and update this component.
+
+1. Go into HACS -> CUSTOM REPOSITORIES and add url: <https://github.com/odya/hass-ina219-ups-hat> with type "integration"
+2. Go to integration, search "ina219*ups_hat" and click \_Install*.
 
 ### Manual
+
 Download and unzip or clone this repository and copy `custom_components/ina219_ups_hat/` to your configuration directory of Home Assistant, e.g. `~/.homeassistant/custom_components/`.
 
 In the end your file structure should look like that:
+
 ```
 ~/.homeassistant/custom_components/ina219_ups_hat/__init__.py
 ~/.homeassistant/custom_components/ina219_ups_hat/manifest.json
@@ -31,56 +35,64 @@ In the end your file structure should look like that:
 ```
 
 ## Configuration
+
 ### Sensor
-Create a new sensor entry in your `configuration.yaml` 
+
+Create a new sensor entry in your `configuration.yaml`
 
 ```yaml
 sensor:
   - platform: ina219_ups_hat
-    name: Hassio UPS          # Optional
-    unique_id: hassio_ups     # Optional
-    scan_interval: 60         # Optional
-    batteries_count: 3        # Optional
-    max_soc: 91               # Optional
-    battery_capacity: 9000    # Optional
-    sma_samples: 5            # Optional
-    min_online_current: -100  # Optional, mA
-    min_charging_current: 55  # Optional, mA
+    name: Hassio UPS # Optional
+    unique_id: hassio_ups # Optional
+    scan_interval: 60 # Optional
+    addr: 0x41 # Required
+    batteries_count: 3 # Optional
+    max_soc: 91 # Optional
+    battery_capacity: 9000 # Optional
+    sma_samples: 5 # Optional
+    min_online_current: -100 # Optional, mA
+    min_charging_current: 55 # Optional, mA
 ```
+
 Following data can be read:
- - SoC (State of Charge)
- - Voltage
- - Current
- - Power
- - Charging Status
- - Online Status
- - Remaining Capacity
- - Remaining Time
+
+- SoC (State of Charge)
+- Voltage
+- Current
+- Power
+- Charging Status
+- Online Status
+- Remaining Capacity
+- Remaining Time
 
 If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
 
 ```yaml
 sensor:
   - platform: ina219_ups_hat
-    max_soc: 91                      
+    max_soc: 91
 ```
 
 #### SMA Filtering
+
 By default, the SMA5 filter is applied to the measurements from INA219. That's necessary to filter out noise from the switching power supply and provide smoother readings. You can control the window size with the `sma_samples` property.
 
 ```yaml
 sensor:
   - platform: ina219_ups_hat
     max_soc: 91
-    sma_samples: 10                    
+    sma_samples: 10
 ```
 
 *Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
 
 #### Batteries Count
+
 The original Waveshare UPS Hat has 2 batteries in series (8.4V), but some versions of the UPS Hats may have 3 batteries (12.6V). If you have more than 2 batteries in series, use the `batteries_count` parameter.
 
 ### Example automations
+
 Copy contents of [examples/automations.yaml](/examples/automations.yaml) to your `automations.yaml`. Customize.
 
 ## Directions for installing smbus support on Raspberry Pi
@@ -101,7 +113,7 @@ $ sudo raspi-config
 
 Select `Interfacing options->I2C` choose `<Yes>` and hit `Enter`, then go to `Finish` and you'll be prompted to reboot.
 
-Install dependencies for use the `smbus-cffi` module and enable your `homeassistant` user to join the _i2c_ group:
+Install dependencies for use the `smbus-cffi` module and enable your `homeassistant` user to join the *i2c* group:
 
 ```bash
 # pi user environment: Install i2c dependencies and utilities
@@ -114,7 +126,11 @@ $ sudo addgroup homeassistant i2c
 $ sudo reboot
 ```
 
-#### Check the i2c address of the sensor
+#### Check the i2c address of the sensor (using HassOS I2C Configurator)
+
+You may use [HassOS I2C Configurator](https://community.home-assistant.io/t/add-on-hassos-i2c-configurator/264167) to activate i2c on your Hass host and search available devices addresses
+
+#### Check the i2c address of the sensor (using i2c-tools)
 
 After installing `i2c-tools`, a new utility is available to scan the addresses of the connected sensors:
 
@@ -137,11 +153,14 @@ It will output a table like this:
 ```
 
 ## Thanks
+
 Most of the code was written by [@mykhailog](https://github.com/mykhailog), the author of the original [integration](https://github.com/mykhailog/hacs_waveshare_ups_hat). Unfortunately, his repository seems to be inactive, so I decided to fork it.
 
 ## Notes
+
 - Original [waveshare_ups_hat](https://github.com/mykhailog/hacs_waveshare_ups_hat) integration by [@mykhailog](https://github.com/mykhailog) (seems to be dead)
 - Cheap [INA219 UPS Hat](https://www.aliexpress.com/item/1005005071564178.html) module from AliExpress
 
 ## License
-MIT 2023
+
+MIT 2024
