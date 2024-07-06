@@ -1,5 +1,3 @@
-MIN_ONLINE_CURRENT = -100
-MIN_CHARGING_CURRENT = 1
 MIN_BATTERY_CONNECTED_CURRENT = 0.1
 LOW_BATTERY_PERCENTAGE = 20
 
@@ -9,6 +7,8 @@ DEFAULT_NAME = "ina219_ups_hat"
 CONF_BATTERY_CAPACITY = "battery_capacity"
 CONF_MAX_SOC = "max_soc"
 CONF_SMA_SAMPLES = "sma_samples"
+CONF_MIN_ONLINE_CURRENT = "min_online_current"
+CONF_MIN_CHARGING_CURRENT = "min_charging_current"
 CONF_BATTERIES_COUNT = "batteries_count"
 CONF_SCAN_INTERVAL = "scan_interval"
 

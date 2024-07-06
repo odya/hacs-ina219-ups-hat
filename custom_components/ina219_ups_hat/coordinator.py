@@ -1,5 +1,5 @@
 import logging
-from .const import CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, MIN_CHARGING_CURRENT, MIN_ONLINE_CURRENT
+from .const import CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, CONF_MIN_CHARGING_CURRENT, CONF_MIN_ONLINE_CURRENT
 from .ina219 import INA219
 from .ina219_wrapper import INA219Wrapper
 from homeassistant import core
@@ -25,6 +25,8 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self._battery_capacity = config.get(CONF_BATTERY_CAPACITY)
         self._batteries_count = config.get(CONF_BATTERIES_COUNT)
         self._sma_samples = config.get(CONF_SMA_SAMPLES)
+        self._min_online_current = config.get(CONF_MIN_ONLINE_CURRENT)
+        self._min_charging_current = config.get(CONF_MIN_CHARGING_CURRENT)
 
         self._ina219 = INA219(addr=0x41)
         self._ina219_wrapper = INA219Wrapper(self._ina219, self._sma_samples)
@@ -63,8 +65,9 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
 
             power_calculated = bus_voltage * (current / 1000)
 
-            online = bool(current > MIN_ONLINE_CURRENT)
-            charging = bool(current > MIN_CHARGING_CURRENT)
+            current_lowres = round(current / 1000, 2) * 1000 # current in mA
+            online = bool(current_lowres > self._min_online_current)
+            charging = bool(current_lowres > self._min_charging_current)
 
             if self._battery_capacity is None:
                 remaining_battery_capacity = None
@@ -82,7 +85,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
 
             return {
                 "voltage": round(bus_voltage + shunt_voltage, 2),
-                "current": round(current / 1000, 5),
+                "current": round(current / 1000, 2),
                 "power": round(power_calculated, 2),
                 "soc": round(soc, 1),
                 "remaining_battery_capacity": round(remaining_battery_capacity, 0),

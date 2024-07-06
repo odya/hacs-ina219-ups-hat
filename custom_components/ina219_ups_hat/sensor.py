@@ -28,6 +28,8 @@ from .const import (
     CONF_MAX_SOC,
     CONF_SCAN_INTERVAL,
     CONF_SMA_SAMPLES,
+    CONF_MIN_ONLINE_CURRENT,
+    CONF_MIN_CHARGING_CURRENT,
     DEFAULT_NAME,
     DOMAIN,
 )
@@ -43,6 +45,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_BATTERY_CAPACITY): cv.positive_int,
         vol.Optional(CONF_BATTERIES_COUNT, default=2): cv.positive_int,
         vol.Optional(CONF_SMA_SAMPLES, default=5): cv.positive_int,
+        vol.Optional(CONF_MIN_ONLINE_CURRENT, default=-100): int,
+        vol.Optional(CONF_MIN_CHARGING_CURRENT, default=50): cv.positive_int,
         vol.Optional(CONF_UNIQUE_ID): cv.string,
     }
 )
