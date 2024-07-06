@@ -85,7 +85,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
 
             return {
                 "voltage": round(bus_voltage + shunt_voltage, 2),
-                "current": round(current / 1000, 5),
+                "current": round(current / 1000, 2),
                 "power": round(power_calculated, 2),
                 "soc": round(soc, 1),
                 "remaining_battery_capacity": round(remaining_battery_capacity, 0),
