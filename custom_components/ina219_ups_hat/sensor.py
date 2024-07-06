@@ -11,6 +11,7 @@ from homeassistant.const import (
     UnitOfElectricPotential,
     UnitOfPower,
     UnitOfTime,
+    UnitOfEnergy,
 )
 
 import homeassistant.helpers.config_validation as cv
@@ -143,7 +144,7 @@ class RemainingCapacitySensor(INA219UpsHatSensor):
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator)
         self._name = "Remaining Capacity"
-        self._attr_native_unit_of_measurement = "mAh"
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
         self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
         self._attr_suggested_display_precision = 0
 

@@ -45,6 +45,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
 
             bus_voltage = ina219_wrapper.getBusVoltageSMA_V()  # voltage on V- (load side)
             shunt_voltage = (ina219_wrapper.getShuntVoltageSMA_mV() / 1000) # voltage between V+ and V- across the shunt
+            total_voltage = bus_voltage + shunt_voltage
             current = ina219_wrapper.getCurrentSMA_mA()  # current in mA
             power = ina219_wrapper.getPowerSMA_W()  # power in W
 
@@ -84,11 +85,11 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                     remaining_time = None
 
             return {
-                "voltage": round(bus_voltage + shunt_voltage, 2),
+                "voltage": round(total_voltage, 2),
                 "current": round(current / 1000, 2),
                 "power": round(power_calculated, 2),
                 "soc": round(soc, 1),
-                "remaining_battery_capacity": round(remaining_battery_capacity, 0),
+                "remaining_battery_capacity": round((remaining_battery_capacity * total_voltage) / 1000, 2),
                 "remaining_time": remaining_time,
                 "online": online,
                 "charging": charging,
