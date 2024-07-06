@@ -1,0 +1,3 @@
+.idea
+custom_components/ina219_ups_hat/__pycache__
+custom_components/ina219_ups_hat/ina219/__pycache__/*

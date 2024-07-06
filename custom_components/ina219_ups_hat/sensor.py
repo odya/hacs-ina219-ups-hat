@@ -24,6 +24,7 @@ import voluptuous as vol
 from .entity import INA219UpsHatEntity
 from .coordinator import INA219UpsHatCoordinator
 from .const import (
+    CONF_ADDR,
     CONF_BATTERIES_COUNT,
     CONF_BATTERY_CAPACITY,
     CONF_MAX_SOC,
@@ -42,9 +43,10 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-        vol.Optional(CONF_MAX_SOC, default=100): cv.positive_int,
-        vol.Optional(CONF_BATTERY_CAPACITY): cv.positive_int,
-        vol.Optional(CONF_BATTERIES_COUNT, default=2): cv.positive_int,
+        vol.Optional(CONF_ADDR): cv.string,
+        vol.Optional(CONF_MAX_SOC, default=91): cv.positive_int,
+        vol.Optional(CONF_BATTERY_CAPACITY, 9000): cv.positive_int,
+        vol.Optional(CONF_BATTERIES_COUNT, default=3): cv.positive_int,
         vol.Optional(CONF_SMA_SAMPLES, default=5): cv.positive_int,
         vol.Optional(CONF_MIN_ONLINE_CURRENT, default=-100): int,
         vol.Optional(CONF_MIN_CHARGING_CURRENT, default=50): cv.positive_int,

@@ -2,6 +2,7 @@
 # https://github.com/waveshare/UPS-Power-Module/blob/master/ups_display/ina219.py
 import smbus2 as smbus
 import time
+from .ina219_interface import INA219Interface
 
 # Config Register (R/W)
 _REG_CONFIG                 = 0x00
@@ -58,9 +59,9 @@ class Mode:
     SANDBVOLT_CONTINUOUS    = 0x07      # shunt and bus voltage continuous
 
 
-class INA219:
+class INA219(INA219Interface):
     def __init__(self, i2c_bus=1, addr=0x40):
-        self.bus = smbus.SMBus(i2c_bus);
+        self.bus = smbus.SMBus(i2c_bus)
         self.addr = addr
 
         # Set chip to known config values to start

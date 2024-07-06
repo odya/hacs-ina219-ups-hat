@@ -1,6 +1,6 @@
 import logging
-from .const import CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, CONF_MIN_CHARGING_CURRENT, CONF_MIN_ONLINE_CURRENT
-from .ina219 import INA219
+from .const import CONF_ADDR, CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, CONF_MIN_CHARGING_CURRENT, CONF_MIN_ONLINE_CURRENT
+from .ina219.config import get_ina219_class
 from .ina219_wrapper import INA219Wrapper
 from homeassistant import core
 from homeassistant.const import CONF_NAME, CONF_UNIQUE_ID
@@ -21,6 +21,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self.name_prefix = config.get(CONF_NAME)
         self.id_prefix = config.get(CONF_UNIQUE_ID)
 
+        self._addr = config.get(CONF_ADDR)
         self._max_soc = config.get(CONF_MAX_SOC)
         self._battery_capacity = config.get(CONF_BATTERY_CAPACITY)
         self._batteries_count = config.get(CONF_BATTERIES_COUNT)
@@ -28,7 +29,8 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self._min_online_current = config.get(CONF_MIN_ONLINE_CURRENT)
         self._min_charging_current = config.get(CONF_MIN_CHARGING_CURRENT)
 
-        self._ina219 = INA219(addr=0x41)
+        INA219 = get_ina219_class()
+        self._ina219 = INA219(addr=int(self._addr, 16))
         self._ina219_wrapper = INA219Wrapper(self._ina219, self._sma_samples)
 
         super().__init__(
