@@ -16,7 +16,7 @@ from homeassistant.const import (
 
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.helpers.event import async_track_time_interval
+
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import logging
 import voluptuous as vol
@@ -61,8 +61,11 @@ async def async_setup_platform(
     async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    coordinator = INA219UpsHatCoordinator(hass, config)
-    await coordinator.async_refresh()
+    # We only want this platform to be set up via discovery.
+    if discovery_info is None:
+        return
+
+    coordinator = discovery_info.get("coordinator")
 
     sensors = [
         VoltageSensor(coordinator),
@@ -73,16 +76,6 @@ async def async_setup_platform(
         RemainingTimeSensor(coordinator),
     ]
     async_add_entities(sensors)
-
-    hass.helpers.discovery.load_platform('binary_sensor', DOMAIN, {
-        "coordinator": coordinator
-    }, config)
-
-    async def async_update_data(now):
-        await coordinator.async_request_refresh()
-
-    async_track_time_interval(hass, async_update_data,
-                              config.get(CONF_SCAN_INTERVAL))
 
 
 class INA219UpsHatSensor(INA219UpsHatEntity, SensorEntity):
