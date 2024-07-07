@@ -42,10 +42,10 @@ Create a new sensor entry in your `configuration.yaml`
 
 ```yaml
 ina219_ups_hat:
-  name: Hassio UPS          # Optional
-  unique_id: hassio_ups     # Optional
+  name: Hassio UPS          # Required
+  unique_id: hassio_ups     # Required
   addr: 0x41                # Required
-  scan_interval: 60         # Optional
+  scan_interval: 60         # Required
   batteries_count: 3        # Optional
   max_soc: 91               # Optional
   battery_capacity: 9000    # Optional
