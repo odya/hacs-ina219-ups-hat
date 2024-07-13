@@ -3,18 +3,6 @@ from abc import ABC, abstractmethod
 # Define the interface for INA219
 class INA219Interface(ABC):
     @abstractmethod
-    def read(self, address):
-        pass
-
-    @abstractmethod
-    def write(self, address, data):
-        pass
-
-    @abstractmethod
-    def set_calibration_32V_2A(self):
-        pass
-
-    @abstractmethod
     def getShuntVoltage_mV(self):
         pass
 

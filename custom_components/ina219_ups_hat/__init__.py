@@ -2,6 +2,7 @@
 from __future__ import annotations
 from datetime import timedelta
 import json
+import logging
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
@@ -12,18 +13,15 @@ from .coordinator import INA219UpsHatCoordinator
 
 from .const import CONF_SCAN_INTERVAL, DOMAIN
 
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup(hass: HomeAssistant, config: ConfigType):
     """Your controller/hub specific code."""
 
-    if DOMAIN not in config:
-        return False
+    # if DOMAIN not in config:
+    #     return False
 
-    sensor_config: ConfigType = config[DOMAIN]
-
-    if CONF_SCAN_INTERVAL not in sensor_config:
-        return False
-    sensor_config[CONF_SCAN_INTERVAL] = timedelta(seconds=sensor_config[CONF_SCAN_INTERVAL])
+    sensor_config = config["sensor"][0]
 
     coordinator = INA219UpsHatCoordinator(hass, sensor_config)
     await coordinator.async_refresh()
