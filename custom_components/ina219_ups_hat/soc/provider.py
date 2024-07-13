@@ -14,7 +14,7 @@ class SocOcvProvider():
         soc_voltage_data = self.load_json_to_dict(os.path.join(current_dir, ocv_file))
 
         soc_voltage_df = pd.DataFrame(list(soc_voltage_data.items()), columns=['SOC', 'Voltage'])
-        print(soc_voltage_df)
+        # print(soc_voltage_df)
 
         # Create the cubic interpolation function
         cubic_interp_func = interp1d(soc_voltage_df['SOC'], soc_voltage_df['Voltage'],
@@ -25,7 +25,7 @@ class SocOcvProvider():
         # Create a new DataFrame for the detailed SOC-Voltage data
         self._detailed_soc_voltage_df = pd.DataFrame(
             {'SOC': detailed_soc, 'Voltage': detailed_voltage})
-        print(self._detailed_soc_voltage_df)
+        # print(self._detailed_soc_voltage_df)
 
         # Interpolation function
         self._linear_interp_func = interp1d(
