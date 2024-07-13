@@ -1,5 +1,7 @@
 import logging
-from .const import CONF_ADDR, CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, CONF_MIN_CHARGING_CURRENT, CONF_MIN_ONLINE_CURRENT
+
+from .soc.provider import SocOcvProvider
+from .const import CONF_ADDR, CONF_BATTERIES_COUNT, CONF_BATTERY_CAPACITY, CONF_MAX_SOC, CONF_SMA_SAMPLES, CONF_MIN_CHARGING_CURRENT, CONF_MIN_ONLINE_CURRENT, OCV_FILE
 from .ina219.config import get_ina219_class
 from .ina219_wrapper import INA219Wrapper
 from homeassistant import core
@@ -33,6 +35,8 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self._ina219 = INA219(addr=int(self._addr))
         self._ina219_wrapper = INA219Wrapper(self._ina219, self._sma_samples)
 
+        self._socOcvProvider = SocOcvProvider(OCV_FILE)
+
         super().__init__(
             hass,
             _LOGGER,
@@ -54,17 +58,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
             smooth_bus_voltage = ina219_wrapper.getBusVoltageSMAx2_V()
             smooth_current = ina219_wrapper.getCurrentSMAx2_mA()
 
-            soc_c1 = 3 * self._batteries_count
-            soc_c2 = 1.2 * self._batteries_count
-            real_soc = (smooth_bus_voltage - soc_c1) / soc_c2 * 100
-            soc = (
-                (smooth_bus_voltage - soc_c1) /
-                (soc_c2 * (self._max_soc / 100.0)) * 100
-            )
-            if soc > 100:
-                soc = 100
-            if soc < 0:
-                soc = 0
+            soc = self._socOcvProvider.get_soc_from_voltage(smooth_bus_voltage / self._batteries_count)
 
             power_calculated = bus_voltage * (current / 1000)
 
@@ -76,7 +70,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                 remaining_battery_capacity = None
                 remaining_time = None
             else:
-                remaining_battery_capacity = (real_soc / 100.0) * self._battery_capacity
+                remaining_battery_capacity = (self._battery_capacity / 100.0) * soc
                 if not online:
                     remaining_time = round(
                         10 * (remaining_battery_capacity / 1000)
@@ -91,7 +85,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                 "current": round(current / 1000, 2),
                 "power": round(power_calculated, 2),
                 "soc": round(soc, 1),
-                "remaining_battery_capacity": round((remaining_battery_capacity * total_voltage) / 1000, 2),
+                "remaining_battery_capacity": round((remaining_battery_capacity * total_voltage) / 1000, 2), # in Wh
                 "remaining_time": remaining_time,
                 "online": online,
                 "charging": charging,

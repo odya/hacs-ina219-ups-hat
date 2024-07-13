@@ -41,17 +41,18 @@ In the end your file structure should look like that:
 Create a new sensor entry in your `configuration.yaml`
 
 ```yaml
-ina219_ups_hat:
-  name: Hassio UPS          # Required
-  unique_id: hassio_ups     # Required
-  addr: 0x41                # Required
-  scan_interval: 60         # Required
-  batteries_count: 3        # Optional
-  max_soc: 91               # Optional
-  battery_capacity: 9000    # Optional
-  sma_samples: 5            # Optional
-  min_online_current: -100  # Optional, mA
-  min_charging_current: 50  # Optional, mA
+sensor:
+  - platform: ina219_ups_hat
+    name: Hassio UPS          # Required
+    unique_id: hassio_ups     # Required
+    addr: 0x41                # Required
+    scan_interval: 10         # Required
+    batteries_count: 3        # Optional
+    battery_capacity: 3000    # Optional
+    max_soc: 91               # Optional
+    sma_samples: 5            # Optional
+    min_online_current: -100  # Optional, mA
+    min_charging_current: 55  # Optional, mA
 ```
 
 Following data can be read:
@@ -68,8 +69,9 @@ Following data can be read:
 If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
 
 ```yaml
-ina219_ups_hat:
-  max_soc: 91
+sensor:
+  - platform: ina219_ups_hat
+    max_soc: 91
 ```
 
 #### SMA Filtering
@@ -77,9 +79,10 @@ ina219_ups_hat:
 By default, the SMA5 filter is applied to the measurements from INA219. That's necessary to filter out noise from the switching power supply and provide smoother readings. You can control the window size with the `sma_samples` property.
 
 ```yaml
-ina219_ups_hat:
-  max_soc: 91
-  sma_samples: 10
+sensor:
+  - platform: ina219_ups_hat
+    max_soc: 91
+    sma_samples: 10
 ```
 
 *Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
