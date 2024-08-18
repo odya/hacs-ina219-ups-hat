@@ -94,7 +94,7 @@ ina219_ups_hat:
 ```
 
 
-### Following data can be read:
+## Following data can be read:
 
 - SoC (State of Charge)
 - Voltage
@@ -105,7 +105,7 @@ ina219_ups_hat:
 - Remaining Capacity
 - Remaining Time
 
-### Example automations
+## Example automations
 
 Copy contents of [examples/automations.yaml](/examples/automations.yaml) to your `automations.yaml`. Customize.
 
