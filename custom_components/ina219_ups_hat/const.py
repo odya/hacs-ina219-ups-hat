@@ -1,9 +1,24 @@
+"""Constants."""
+
 MIN_BATTERY_CONNECTED_CURRENT = 0.1
 LOW_BATTERY_PERCENTAGE = 20
-OCV_FILE = "ocv.json"
+DEFAULT_OCV = {
+    0: 2.5,
+    10: 3.0,
+    20: 3.2,
+    30: 3.4,
+    40: 3.5,
+    50: 3.6,
+    60: 3.7,
+    70: 3.8,
+    80: 3.9,
+    90: 4.0,
+    100: 4.2,
+}
 
 DOMAIN = "ina219_ups_hat"
-DEFAULT_NAME = "ina219_ups_hat"
+DEFAULT_UNIQUE_ID = "hassio_ups"
+DEFAULT_NAME = "Hassio UPS"
 
 CONF_BATTERY_CAPACITY = "battery_capacity"
 CONF_ADDR = "addr"

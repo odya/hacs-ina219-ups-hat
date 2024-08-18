@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 # Define the interface for INA219
 class INA219Interface(ABC):
     @abstractmethod

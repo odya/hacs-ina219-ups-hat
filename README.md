@@ -20,42 +20,81 @@ If you use [HACS](https://hacs.xyz/) you can install and update this component.
 
 ### Manual
 
-Download and unzip or clone this repository and copy `custom_components/ina219_ups_hat/` to your configuration directory of Home Assistant, e.g. `~/.homeassistant/custom_components/`.
+Download and unzip or clone this repository and copy content of `custom_components/ina219_ups_hat/` to your configuration directory of Home Assistant, e.g. `~/.homeassistant/custom_components/ina219_ups_hat/`.
 
 In the end your file structure should look like that:
 
 ```
 ~/.homeassistant/custom_components/ina219_ups_hat/__init__.py
 ~/.homeassistant/custom_components/ina219_ups_hat/manifest.json
-~/.homeassistant/custom_components/ina219_ups_hat/sensor.py
-~/.homeassistant/custom_components/ina219_ups_hat/binary_sensor.py
 ~/.homeassistant/custom_components/ina219_ups_hat/const.py
-~/.homeassistant/custom_components/ina219_ups_hat/ina219.py
-~/.homeassistant/custom_components/ina219_ups_hat/ina219_wrapper.py
+~/.homeassistant/custom_components/ina219_ups_hat/ina219/ina219.py
+~/.homeassistant/custom_components/ina219_ups_hat/soc/provider.py
 ```
+
 
 ## Configuration
 
-### Sensor
-
-Create a new sensor entry in your `configuration.yaml`
+Minimal configuration entry in your `configuration.yaml`
 
 ```yaml
-sensor:
-  - platform: ina219_ups_hat
-    name: Hassio UPS          # Required
-    unique_id: hassio_ups     # Required
-    addr: 0x41                # Required
-    scan_interval: 10         # Required
-    batteries_count: 3        # Optional
-    battery_capacity: 3000    # Optional
-    max_soc: 91               # Optional
-    sma_samples: 5            # Optional
-    min_online_current: -100  # Optional, mA
-    min_charging_current: 55  # Optional, mA
+ina219_ups_hat:
+  addr: 0x41                # Required
 ```
 
-Following data can be read:
+### Additional options
+
+Full list of configuration options in your `configuration.yaml`
+
+```yaml
+ina219_ups_hat:
+  name: Hassio UPS          # Optional
+  unique_id: hassio_ups     # Optional
+  addr: 0x41                # Required
+  scan_interval: 10         # Optional
+  batteries_count: 3        # Optional
+  battery_capacity: 3000    # Optional
+  max_soc: 91               # Optional
+  sma_samples: 5            # Optional
+  min_online_current: -100  # Optional, mA
+  min_charging_current: 55  # Optional, mA
+```
+
+#### Batteries Count
+
+The original Waveshare UPS Hat has 2 batteries in series (8.4V), but some versions of the UPS Hats may have 3 batteries (12.6V). If you have more than 2 batteries in series, use the `batteries_count` parameter.
+
+#### Battery Capacity
+
+Total capacity of your battery. Most UPS Hats have serial connected cells.
+- For series connected cells the capacity remains the same as that of a single cell. If each cell has a capacity of 2000mAh, the total capacity of the series connection remains 2000mAh, regardless of the number of cells connected in series
+- For parallel connected cells the total capacity is the sum of the capacities of all the cells connected in parallel. For instance, if you connect four 2000mAh cells in parallel, the total capacity becomes 8000mAh (2000mAh * 4)
+
+#### SMA Filtering
+
+By default, the SMA5 filter is applied to the measurements from INA219. That's necessary to filter out noise from the switching power supply and provide smoother readings. You can control the window size with the `sma_samples` property.
+
+```yaml
+ina219_ups_hat:
+  max_soc: 91
+  sma_samples: 10
+```
+
+*Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
+
+#### SoC
+
+From v0.3.11 intergration uses SoC calculation method via common OCV curve for 18650 cells. The open-circuit voltage (OCV) curve represents the voltage of a battery as a function of its state of charge (SOC) when no external current is flowing, and all chemical reactions inside the battery are at equilibrium.
+
+If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
+
+```yaml
+ina219_ups_hat:
+  max_soc: 91
+```
+
+
+## Following data can be read:
 
 - SoC (State of Charge)
 - Voltage
@@ -66,32 +105,7 @@ Following data can be read:
 - Remaining Capacity
 - Remaining Time
 
-If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
-
-```yaml
-sensor:
-  - platform: ina219_ups_hat
-    max_soc: 91
-```
-
-#### SMA Filtering
-
-By default, the SMA5 filter is applied to the measurements from INA219. That's necessary to filter out noise from the switching power supply and provide smoother readings. You can control the window size with the `sma_samples` property.
-
-```yaml
-sensor:
-  - platform: ina219_ups_hat
-    max_soc: 91
-    sma_samples: 10
-```
-
-*Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
-
-#### Batteries Count
-
-The original Waveshare UPS Hat has 2 batteries in series (8.4V), but some versions of the UPS Hats may have 3 batteries (12.6V). If you have more than 2 batteries in series, use the `batteries_count` parameter.
-
-### Example automations
+## Example automations
 
 Copy contents of [examples/automations.yaml](/examples/automations.yaml) to your `automations.yaml`. Customize.
 

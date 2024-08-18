@@ -1,19 +1,24 @@
-"""INA219 UPS Hat binary_sensors"""
-from __future__ import annotations
-from .coordinator import INA219UpsHatCoordinator
-from .entity import INA219UpsHatEntity
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity
+"""INA219 UPS Hat binary_sensors."""
 
+from __future__ import annotations
+
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+
+from .coordinator import INA219UpsHatCoordinator
+from .entity import INA219UpsHatEntity
 
 
 async def async_setup_platform(
     hass: HomeAssistant,
     config: ConfigType,
     async_add_entities: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None
+    discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up binary sensor platform."""
     # We only want this platform to be set up via discovery.
@@ -31,13 +36,15 @@ async def async_setup_platform(
 
 
 class INA219UpsHatBinarySensor(INA219UpsHatEntity, BinarySensorEntity):
-    """Base binary sensor"""
+    """Base binary sensor."""
 
     def __init__(self, coordinator: INA219UpsHatCoordinator) -> None:
         super().__init__(coordinator)
 
 
 class OnlineBinarySensor(INA219UpsHatBinarySensor):
+    """Online binary sensor."""
+
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator)
         self._name = "Online"
@@ -49,6 +56,8 @@ class OnlineBinarySensor(INA219UpsHatBinarySensor):
 
 
 class ChargingBinarySensor(INA219UpsHatBinarySensor):
+    """Charging binary sensor."""
+
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator)
         self._name = "Charging"

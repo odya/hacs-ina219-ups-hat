@@ -1,58 +1,25 @@
-"""INA219 UPS Hat sensors"""
+"""INA219 UPS Hat sensors."""
 
-from homeassistant.components.sensor.const import SensorDeviceClass, SensorStateClass
+import logging
+
 from homeassistant import core
-from homeassistant.components.sensor import SensorEntity, PLATFORM_SCHEMA
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor.const import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
-    CONF_NAME,
-    CONF_UNIQUE_ID,
     PERCENTAGE,
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
+    UnitOfEnergy,
     UnitOfPower,
     UnitOfTime,
-    UnitOfEnergy,
 )
-
-import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-import logging
-import voluptuous as vol
-
-from .entity import INA219UpsHatEntity
 from .coordinator import INA219UpsHatCoordinator
-from .const import (
-    CONF_ADDR,
-    CONF_BATTERIES_COUNT,
-    CONF_BATTERY_CAPACITY,
-    CONF_MAX_SOC,
-    CONF_SCAN_INTERVAL,
-    CONF_SMA_SAMPLES,
-    CONF_MIN_ONLINE_CURRENT,
-    CONF_MIN_CHARGING_CURRENT,
-    DEFAULT_NAME,
-    DOMAIN,
-)
-
+from .entity import INA219UpsHatEntity
 
 _LOGGER = logging.getLogger(__name__)
-
-
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
-    {
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-        vol.Optional(CONF_ADDR): cv.string,
-        vol.Optional(CONF_MAX_SOC, default=91): cv.positive_int,
-        vol.Optional(CONF_BATTERY_CAPACITY, 9000): cv.positive_int,
-        vol.Optional(CONF_BATTERIES_COUNT, default=3): cv.positive_int,
-        vol.Optional(CONF_SMA_SAMPLES, default=5): cv.positive_int,
-        vol.Optional(CONF_MIN_ONLINE_CURRENT, default=-100): int,
-        vol.Optional(CONF_MIN_CHARGING_CURRENT, default=50): cv.positive_int,
-        vol.Optional(CONF_UNIQUE_ID): cv.string,
-    }
-)
 
 
 async def async_setup_platform(
@@ -79,7 +46,7 @@ async def async_setup_platform(
 
 
 class INA219UpsHatSensor(INA219UpsHatEntity, SensorEntity):
-    """Base sensor"""
+    """Base sensor."""
 
     def __init__(self, coordinator: INA219UpsHatCoordinator) -> None:
         super().__init__(coordinator)
