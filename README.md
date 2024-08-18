@@ -32,11 +32,19 @@ In the end your file structure should look like that:
 ~/.homeassistant/custom_components/ina219_ups_hat/soc/provider.py
 ```
 
+
 ## Configuration
 
-### Sensor
+Minimal configuration entry in your `configuration.yaml`
 
-Create a new sensor entry in your `configuration.yaml`
+```yaml
+ina219_ups_hat:
+  addr: 0x41                # Required
+```
+
+### Additional options
+
+Full list of configuration options in your `configuration.yaml`
 
 ```yaml
 ina219_ups_hat:
@@ -52,23 +60,15 @@ ina219_ups_hat:
   min_charging_current: 55  # Optional, mA
 ```
 
-Following data can be read:
+#### Batteries Count
 
-- SoC (State of Charge)
-- Voltage
-- Current
-- Power
-- Charging Status
-- Online Status
-- Remaining Capacity
-- Remaining Time
+The original Waveshare UPS Hat has 2 batteries in series (8.4V), but some versions of the UPS Hats may have 3 batteries (12.6V). If you have more than 2 batteries in series, use the `batteries_count` parameter.
 
-If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
+#### Battery Capacity
 
-```yaml
-ina219_ups_hat:
-  max_soc: 91
-```
+Total capacity of your battery. Most UPS Hats have serial connected cells.
+- For series connected cells the capacity remains the same as that of a single cell. If each cell has a capacity of 2000mAh, the total capacity of the series connection remains 2000mAh, regardless of the number of cells connected in series
+- For parallel connected cells the total capacity is the sum of the capacities of all the cells connected in parallel. For instance, if you connect four 2000mAh cells in parallel, the total capacity becomes 8000mAh (2000mAh * 4)
 
 #### SMA Filtering
 
@@ -82,9 +82,28 @@ ina219_ups_hat:
 
 *Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
 
-#### Batteries Count
+#### SoC
 
-The original Waveshare UPS Hat has 2 batteries in series (8.4V), but some versions of the UPS Hats may have 3 batteries (12.6V). If you have more than 2 batteries in series, use the `batteries_count` parameter.
+From v0.3.11 intergration uses SoC calculation method via common OCV curve for 18650 cells. The open-circuit voltage (OCV) curve represents the voltage of a battery as a function of its state of charge (SOC) when no external current is flowing, and all chemical reactions inside the battery are at equilibrium.
+
+If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
+
+```yaml
+ina219_ups_hat:
+  max_soc: 91
+```
+
+
+### Following data can be read:
+
+- SoC (State of Charge)
+- Voltage
+- Current
+- Power
+- Charging Status
+- Online Status
+- Remaining Capacity
+- Remaining Time
 
 ### Example automations
 
