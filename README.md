@@ -20,18 +20,16 @@ If you use [HACS](https://hacs.xyz/) you can install and update this component.
 
 ### Manual
 
-Download and unzip or clone this repository and copy `custom_components/ina219_ups_hat/` to your configuration directory of Home Assistant, e.g. `~/.homeassistant/custom_components/`.
+Download and unzip or clone this repository and copy content of `custom_components/ina219_ups_hat/` to your configuration directory of Home Assistant, e.g. `~/.homeassistant/custom_components/ina219_ups_hat/`.
 
 In the end your file structure should look like that:
 
 ```
 ~/.homeassistant/custom_components/ina219_ups_hat/__init__.py
 ~/.homeassistant/custom_components/ina219_ups_hat/manifest.json
-~/.homeassistant/custom_components/ina219_ups_hat/sensor.py
-~/.homeassistant/custom_components/ina219_ups_hat/binary_sensor.py
 ~/.homeassistant/custom_components/ina219_ups_hat/const.py
-~/.homeassistant/custom_components/ina219_ups_hat/ina219.py
-~/.homeassistant/custom_components/ina219_ups_hat/ina219_wrapper.py
+~/.homeassistant/custom_components/ina219_ups_hat/ina219/ina219.py
+~/.homeassistant/custom_components/ina219_ups_hat/soc/provider.py
 ```
 
 ## Configuration
