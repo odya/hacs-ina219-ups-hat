@@ -68,8 +68,9 @@ Following data can be read:
 If you consistently experience capacity below 100% when the device is fully charged, you can adjust it using the `max_soc` property.
 
 ```yaml
-ina219_ups_hat:
-  max_soc: 91
+sensor:
+  - platform: ina219_ups_hat
+    max_soc: 91
 ```
 
 #### SMA Filtering
@@ -77,9 +78,10 @@ ina219_ups_hat:
 By default, the SMA5 filter is applied to the measurements from INA219. That's necessary to filter out noise from the switching power supply and provide smoother readings. You can control the window size with the `sma_samples` property.
 
 ```yaml
-ina219_ups_hat:
-  max_soc: 91
-  sma_samples: 10
+sensor:
+  - platform: ina219_ups_hat
+    max_soc: 91
+    sma_samples: 10
 ```
 
 *Tip:* Doubled window size is used for calculation of SoC, Remaining Battery Capacity and Remaining Time
