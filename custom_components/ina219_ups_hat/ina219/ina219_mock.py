@@ -1,5 +1,7 @@
 import random
+
 from .ina219_interface import INA219Interface
+
 
 class MockINA219(INA219Interface):
     def __init__(self, i2c_bus=1, addr=0x40):

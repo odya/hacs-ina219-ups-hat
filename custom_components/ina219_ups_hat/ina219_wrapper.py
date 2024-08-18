@@ -1,12 +1,16 @@
-import numpy as np
+"""Wrapper for ina219 lib."""
+
 from collections import deque
+
+import numpy as np
 
 from .ina219.ina219_interface import INA219Interface
 
 COEF_SMAx2 = 2
 
+
 class INA219Wrapper:
-    def __init__(self, ina219 : INA219Interface, samples_cnt : int):
+    def __init__(self, ina219: INA219Interface, samples_cnt: int) -> None:
         self._ina219 = ina219
         self._bus_voltage_buf = deque(maxlen=samples_cnt * COEF_SMAx2)
         self._shunt_voltage_buf = deque(maxlen=samples_cnt)
@@ -43,12 +47,12 @@ class INA219Wrapper:
             return True
         return False
 
-    def _getSMAValue(self, buf:deque, divider:int=1):
+    def _getSMAValue(self, buf: deque, divider: int = 1):
         if divider > 1:
             return np.mean(self._getBufTail(buf, divider))
         return np.mean(buf)
 
-    def _getSMMValue(self, buf:deque, divider:int=1):
+    def _getSMMValue(self, buf: deque, divider: int = 1):
         if divider > 1:
             return np.median(self._getBufTail(buf, divider))
         return np.median(buf)

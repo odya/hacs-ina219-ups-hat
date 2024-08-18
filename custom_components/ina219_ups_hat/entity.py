@@ -1,10 +1,14 @@
+"""INA219 UPS Hat entity."""
+
+from homeassistant.helpers.device_registry import DeviceInfo
 
 from .const import DOMAIN
 from .coordinator import INA219UpsHatCoordinator
-from homeassistant.helpers.device_registry import DeviceInfo
 
 
-class INA219UpsHatEntity():
+class INA219UpsHatEntity:
+    """INA219 UPS Hat entity."""
+
     def __init__(self, coordinator: INA219UpsHatCoordinator) -> None:
         self._coordinator = coordinator
         self._device_id = self._coordinator.id_prefix
@@ -16,11 +20,11 @@ class INA219UpsHatEntity():
 
     @property
     def name(self):
-        return self._coordinator.name_prefix + ' ' + self._name
+        return self._coordinator.name_prefix + " " + self._name
 
     @property
     def unique_id(self):
-        return self._coordinator.id_prefix + '_' + self._name
+        return self._coordinator.id_prefix + "_" + self._name
 
     async def async_update(self):
         await self._coordinator.async_request_refresh()
