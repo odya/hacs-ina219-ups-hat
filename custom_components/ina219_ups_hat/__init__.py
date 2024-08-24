@@ -7,7 +7,6 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_NAME, CONF_UNIQUE_ID, Platform
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
