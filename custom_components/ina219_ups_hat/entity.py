@@ -20,11 +20,11 @@ class INA219UpsHatEntity:
 
     @property
     def name(self):
-        return self._coordinator.name_prefix + " " + self._name
+        return self._coordinator.name_prefix + " " + self.name
 
     @property
     def unique_id(self):
-        return self._coordinator.id_prefix + "_" + self._name
+        return self._coordinator.id_prefix + "_" + self.name
 
     async def async_update(self):
         await self._coordinator.async_request_refresh()
