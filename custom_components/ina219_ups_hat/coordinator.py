@@ -91,7 +91,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                         10
                         * (remaining_battery_capacity / 1000)
                         / -(bus_voltage * (current / 1000)),  # Smooth power
-                        1,
+                        3,
                     )
                 else:
                     remaining_time = None
