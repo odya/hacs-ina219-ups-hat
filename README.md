@@ -144,7 +144,7 @@ $ sudo reboot
 
 You may use [HassOS I2C Configurator](https://community.home-assistant.io/t/add-on-hassos-i2c-configurator/264167) to activate i2c on your Hass host and search available devices addresses
 
-#### How to scan i2c buses to find your device addr
+## How to scan i2c buses to find your device addr
 
 1. Install addon `Advanced SSH & Web Terminal`
 2. Enter the web interface and execute `docker exec -it homeassistant bash -c "apk add i2c-tools && i2cdetect -y 0 && i2cdetect -y 1"`
