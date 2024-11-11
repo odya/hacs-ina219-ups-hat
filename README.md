@@ -144,26 +144,33 @@ $ sudo reboot
 
 You may use [HassOS I2C Configurator](https://community.home-assistant.io/t/add-on-hassos-i2c-configurator/264167) to activate i2c on your Hass host and search available devices addresses
 
-#### Check the i2c address of the sensor (using i2c-tools)
+## How to scan i2c buses to find your device addr
 
-After installing `i2c-tools`, a new utility is available to scan the addresses of the connected sensors:
+1. Install addon `Advanced SSH & Web Terminal`
+2. Enter the web interface and execute `docker exec -it homeassistant bash -c "apk add i2c-tools && i2cdetect -y 0 && i2cdetect -y 1"`
 
-```bash
-/usr/sbin/i2cdetect -y 1
+After that you'll get list of found i2c devices. First table is for channel 0, second for channel 1.
 ```
-
-It will output a table like this:
-
-```text
+➜  ~ docker exec -it homeassistant bash -c "apk add i2c-tools && i2cdetect -y 0 && i2cdetect -y 1"
+OK: 267 MiB in 224 packages
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- 23 -- -- -- -- -- -- -- -- -- -- -- --
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40: 40 -- -- -- -- -- UU -- -- -- -- -- -- -- -- --
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-70: -- -- -- -- -- -- -- 77
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- 41 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --  
 ```
 
 ## Thanks

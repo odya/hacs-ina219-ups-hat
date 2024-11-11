@@ -68,7 +68,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
             # power = ina219_wrapper.getPowerSMA_W()  # power in W
 
             smooth_bus_voltage = ina219_wrapper.getBusVoltageSMAx2_V()
-            # smooth_current = ina219_wrapper.getCurrentSMAx2_mA()
+            smooth_current = ina219_wrapper.getCurrentSMAx2_mA()
 
             soc = self._socOcvProvider.get_soc_from_voltage(
                 smooth_bus_voltage / self._batteries_count
@@ -90,7 +90,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                     remaining_time = round(
                         10
                         * (remaining_battery_capacity / 1000)
-                        / -(bus_voltage * (current / 1000)),  # Smooth power
+                        / -(smooth_bus_voltage * (smooth_current / 1000)),  # Smooth power
                         1,
                     )
                 else:
