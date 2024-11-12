@@ -11,6 +11,7 @@ from .const import (
     CONF_ADDR,
     CONF_BATTERIES_COUNT,
     CONF_BATTERY_CAPACITY,
+    CONF_BUS,
     CONF_MAX_SOC,
     CONF_MIN_CHARGING_CURRENT,
     CONF_MIN_ONLINE_CURRENT,
@@ -32,6 +33,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self.id_prefix = config.get(CONF_UNIQUE_ID)
 
         self._addr = config.get(CONF_ADDR)
+        self._bus = config.get(CONF_BUS)
         self._max_soc = config.get(CONF_MAX_SOC)
         self._battery_capacity = config.get(CONF_BATTERY_CAPACITY)
         self._batteries_count = config.get(CONF_BATTERIES_COUNT)
@@ -40,7 +42,7 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
         self._min_charging_current = config.get(CONF_MIN_CHARGING_CURRENT)
 
         INA219 = get_ina219_class()
-        self._ina219 = INA219(addr=int(self._addr))
+        self._ina219 = INA219(i2c_bus=int(self._bus), addr=int(self._addr))
         self._ina219_wrapper = INA219Wrapper(self._ina219, self._sma_samples)
 
         self._socOcvProvider = SocOcvProvider(hass, DEFAULT_OCV)
@@ -90,7 +92,9 @@ class INA219UpsHatCoordinator(DataUpdateCoordinator):
                     remaining_time = round(
                         10
                         * (remaining_battery_capacity / 1000)
-                        / -(smooth_bus_voltage * (smooth_current / 1000)),  # Smooth power
+                        / -(
+                            smooth_bus_voltage * (smooth_current / 1000)
+                        ),  # Smooth power
                         1,
                     )
                 else:
