@@ -18,6 +18,7 @@ from .const import (
     CONF_ADDR,
     CONF_BATTERIES_COUNT,
     CONF_BATTERY_CAPACITY,
+    CONF_BUS,
     CONF_MAX_SOC,
     CONF_MIN_CHARGING_CURRENT,
     CONF_MIN_ONLINE_CURRENT,
@@ -38,6 +39,7 @@ CONFIG_SCHEMA = vol.Schema(
         DOMAIN: vol.Schema(
             {
                 vol.Required(CONF_ADDR): cv.string,
+                vol.Optional(CONF_BUS, default=1): int,
                 vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
                 vol.Optional(CONF_UNIQUE_ID, default=DEFAULT_UNIQUE_ID): cv.string,
                 vol.Optional(CONF_SCAN_INTERVAL, default=60): int,
