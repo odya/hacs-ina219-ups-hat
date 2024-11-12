@@ -51,13 +51,14 @@ ina219_ups_hat:
   name: Hassio UPS          # Optional
   unique_id: hassio_ups     # Optional
   addr: 0x41                # Required
-  scan_interval: 10         # Optional
-  batteries_count: 3        # Optional
-  battery_capacity: 3000    # Optional
-  max_soc: 91               # Optional
-  sma_samples: 5            # Optional
-  min_online_current: -100  # Optional, mA
-  min_charging_current: 55  # Optional, mA
+  bus: 1                    # Optional, default=1
+  scan_interval: 10         # Optional, default=60
+  batteries_count: 3        # Optional, default=3
+  battery_capacity: 3000    # Optional, default=3000
+  max_soc: 91               # Optional, default=91
+  sma_samples: 5            # Optional, default=5
+  min_online_current: -100  # Optional, mA, default=-100
+  min_charging_current: 55  # Optional, mA, default=55
 ```
 
 #### Batteries Count
